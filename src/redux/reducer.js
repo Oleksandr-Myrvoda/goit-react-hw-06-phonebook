@@ -6,8 +6,17 @@ import { addContact, deleteContactAction, filterContact } from "./actions";
 
 import { createReducer } from "@reduxjs/toolkit";
 
-const contactsItemsReducer = createReducer([], {
-  [addContact]: (state, { payload }) => [...state, payload],
+const initialState = {
+  contacts: JSON.parse(localStorage.getItem("contacts")) || [],
+};
+
+const contactsItemsReducer = createReducer(initialState.contacts, {
+  [addContact]: (state, { payload }) => {
+    const updateContacts = [...state, payload];
+    localStorage.setItem("contacts", JSON.stringify(updateContacts));
+    return updateContacts;
+  },
+
   [deleteContactAction]: (state, { payload }) => state.filter((contact) => contact.id !== payload),
 });
 
